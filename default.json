@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Shared dependency update policy for Onbloc repositories.",
+  "extends": [
+    "config:recommended",
+    ":approveMajorUpdates",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "ignorePresets": [":ignoreModulesAndTests"],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/vendor/**",
+    "**/.yarn/cache/**",
+    "**/.yarn/sdks/**"
+  ],
+  "automerge": false,
+  "dependencyDashboard": true,
+  "timezone": "Asia/Seoul",
+  "schedule": ["* 9-17 * * 1"],
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2,
+  "ignoreScripts": true,
+  "lockFileMaintenance": {
+    "enabled": false
+  },
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "automerge": false,
+    "dependencyDashboardApproval": false,
+    "minimumReleaseAge": null,
+    "schedule": [],
+    "groupName": null
+  }
+}

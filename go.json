@@ -1,0 +1,19 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Maintain Go module artifacts, limit indirect updates to security fixes, and review Go version changes separately.",
+  "extends": ["security:gomodIndirectSecurityUpdates"],
+  "packageRules": [
+    {
+      "description": "Run go mod tidy after updating a Go module dependency.",
+      "matchManagers": ["gomod"],
+      "postUpdateOptions": ["gomodTidy"]
+    },
+    {
+      "description": "Require approval for minimum Go and toolchain changes without forcing minimum Go upgrades.",
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["golang", "toolchain"],
+      "dependencyDashboardApproval": true,
+      "groupName": null
+    }
+  ]
+}

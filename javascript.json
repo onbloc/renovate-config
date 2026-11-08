@@ -1,0 +1,18 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Preserve existing JavaScript dependency ranges and delay ordinary npm releases for seven days.",
+  "extends": ["security:minimumReleaseAgeNpm"],
+  "packageRules": [
+    {
+      "description": "Preserve existing pinned and ranged dependency declarations.",
+      "matchManagers": ["npm"],
+      "rangeStrategy": "replace"
+    },
+    {
+      "description": "Wait seven days for ordinary npm major, minor, and patch releases.",
+      "matchDatasources": ["npm"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "minimumReleaseAge": "7 days"
+    }
+  ]
+}
