@@ -70,6 +70,8 @@ The experimental `osvVulnerabilityAlerts` option is not enabled. A seven-day rel
 
 ## Validation
 
+The [validation workflow](.github/workflows/validate.yml) runs on pull requests, pushes to `main`, and manual dispatch. It uses Renovate 44.188.0 in a digest-pinned container, mounts the checkout read-only, and runs strict repository-level validation for all three presets. The job has read-only repository permissions and does not receive a package registry token.
+
 Use Node.js 24.x, version 24.11 or later, to run the pinned validator:
 
 ```sh
