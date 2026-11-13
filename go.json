@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Maintain Go module artifacts, limit indirect updates to security fixes, and review Go version changes separately.",
+  "description": "Maintain Go module artifacts, limit indirect updates to security fixes, review Go version changes separately, and group non-major GORM updates.",
   "extends": ["security:gomodIndirectSecurityUpdates"],
   "packageRules": [
     {
@@ -14,6 +14,19 @@
       "matchDepTypes": ["golang", "toolchain"],
       "dependencyDashboardApproval": true,
       "groupName": null
+    },
+    {
+      "description": "Group non-major GORM core, MySQL driver, and PostgreSQL driver updates for manual review.",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": [
+        "gorm.io/gorm",
+        "gorm.io/driver/mysql",
+        "gorm.io/driver/postgres"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "GORM",
+      "groupSlug": "gorm",
+      "automerge": false
     }
   ]
 }

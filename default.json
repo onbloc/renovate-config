@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Shared dependency update policy for Onbloc repositories.",
+  "description": "Shared dependency update policy for Onbloc and Gnoswap repositories.",
   "extends": [
     "config:recommended",
     ":approveMajorUpdates",
@@ -17,9 +17,9 @@
   "automerge": false,
   "dependencyDashboard": true,
   "timezone": "Asia/Seoul",
-  "schedule": ["* 9-17 * * 1"],
   "prConcurrentLimit": 3,
   "prHourlyLimit": 2,
+  "addLabels": ["renovate"],
   "ignoreScripts": true,
   "lockFileMaintenance": {
     "enabled": false
@@ -27,9 +27,21 @@
   "vulnerabilityAlerts": {
     "enabled": true,
     "automerge": false,
+    "prCreation": "immediate",
     "dependencyDashboardApproval": false,
     "minimumReleaseAge": null,
     "schedule": [],
-    "groupName": null
-  }
+    "groupName": null,
+    "prConcurrentLimit": 0
+  },
+  "packageRules": [
+    {
+      "description": "Group Action references separately from runtime versions and images, keeping major updates separate.",
+      "matchManagers": ["github-actions"],
+      "matchDepTypes": ["action"],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions",
+      "separateMajorMinor": true
+    }
+  ]
 }

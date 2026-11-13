@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Preserve existing JavaScript dependency ranges and delay ordinary npm releases for seven days.",
+  "description": "Preserve JavaScript dependency ranges, delay ordinary npm releases for seven days, and group non-major lint, format, and test tooling.",
   "extends": ["security:minimumReleaseAgeNpm"],
   "packageRules": [
     {
@@ -13,6 +13,40 @@
       "matchDatasources": ["npm"],
       "matchUpdateTypes": ["major", "minor", "patch"],
       "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Group non-major lint and format tooling without including Next.js or Storybook integrations.",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": [
+        "eslint",
+        "@eslint/*",
+        "@typescript-eslint/*",
+        "typescript-eslint",
+        "eslint-*",
+        "!eslint-config-next",
+        "!eslint-plugin-storybook",
+        "prettier",
+        "lint-staged"
+      ],
+      "groupName": "Lint and format tooling",
+      "groupSlug": "lint-format-tooling"
+    },
+    {
+      "description": "Group non-major Jest, ts-jest, and Testing Library updates.",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": [
+        "jest",
+        "jest-*",
+        "@jest/*",
+        "@types/jest",
+        "babel-jest",
+        "ts-jest",
+        "@testing-library/*"
+      ],
+      "groupName": "Test tooling",
+      "groupSlug": "test-tooling"
     }
   ]
 }
