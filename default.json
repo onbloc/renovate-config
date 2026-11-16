@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Shared dependency update policy for Onbloc and Gnoswap repositories.",
+  "description": "Shared dependency update policy for Onbloc repositories.",
   "extends": [
     "config:recommended",
     ":approveMajorUpdates",

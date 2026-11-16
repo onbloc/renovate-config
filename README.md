@@ -1,6 +1,6 @@
 # Onbloc Renovate Config
 
-Shared Renovate presets for Onbloc and Gnoswap repositories. Use them to keep dependency update policies consistent while retaining repository-specific exceptions locally.
+Shared Renovate presets for Onbloc repositories. Use them to keep dependency update policies consistent while retaining repository-specific exceptions locally.
 
 This repository provides configuration only. It does not install Renovate, enable GitHub security features, or change branch protection in consumer repositories.
 
@@ -114,30 +114,6 @@ GitHub supplies the vulnerability alerts; Renovate proposes dependency fixes. Th
 Security PRs can exceed the ordinary three-PR limit because the shared security PR limit is unlimited. They remain ungrouped and require manual merging. The experimental `osvVulnerabilityAlerts` option is not enabled.
 
 If a malicious dependency has already executed, updating it does not replace incident response for affected environments and credentials.
-
-## Following policy changes
-
-The quick-start examples follow this repository's default branch. A merged preset change takes effect when a consumer's Renovate run next resolves the preset; consumers do not receive a separate configuration-change PR merely because the shared preset changed.
-
-To control adoption, reference an existing version tag in every shared preset reference. For example, **only after `v1.0.0` has been published**:
-
-```json
-{
-  "extends": [
-    "github>onbloc/renovate-config#v1.0.0",
-    "github>onbloc/renovate-config:go#v1.0.0"
-  ]
-}
-```
-
-Use the same tag for the common and language presets. To adopt or roll back a policy release, change those references together and review the consumer configuration. A tag pins this repository's files, not the Renovate runtime or its upstream built-in presets. Tag publication is covered in [CONTRIBUTING.md](CONTRIBUTING.md#releasing-policy-changes).
-
-## Troubleshooting
-
-- **Preset cannot be found:** check spelling, the existence of any referenced tag, and Renovate's access to the preset repository. Successful access using a personal token is not sufficient.
-- **Ordinary PR has not appeared:** check Dashboard approval, the seven-day npm release delay, PR limits, repository-specific schedules, and the bot's latest execution log.
-- **Security alert has no PR:** check dependency recognition, availability of a supported fix, App permissions, and Renovate execution logs. Do not disable the alert to hide a remediation failure.
-- **Artifact updates fail:** inspect registry access and package-manager errors. In Go multi-module repositories, check local `replace` relationships and affected `go.sum` files.
 
 ## Contributing and license
 
