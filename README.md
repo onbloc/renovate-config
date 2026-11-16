@@ -58,17 +58,17 @@ The [common preset](default.json) extends `config:recommended`, keeping Renovate
 | Area | Behavior |
 | --- | --- |
 | Ordinary updates | No shared weekly schedule; up to three concurrent PRs and two new PRs per hour, per repository |
-| Ordinary Major updates | Require approval in the Dependency Dashboard before PR creation |
+| Ordinary Major updates | Require Dependency Dashboard approval before PR creation, except for grouped GitHub Action references |
 | Merging | Automerge is disabled; use the repository's required reviews and CI checks |
 | Labels | Add `renovate` without replacing other configured labels |
-| GitHub Actions | Pin commit digests; group Action references, separating Major from non-major updates |
+| GitHub Actions | Pin commit digests; create PRs without Dashboard approval, including Major updates; keep Major and non-major groups separate |
 | Security fixes | Separate, immediate PR creation without ordinary approval, release-age, schedule, or PR-limit gates; still no automerge |
 
 These settings control update processing, not how frequently the hosted bot executes. Dashboard approval controls PR creation, not permission to merge.
 
 ### GitHub Actions grouping
 
-The common group matches the `github-actions` manager's `action` dependency type. Runtime inputs such as `go-version`, reusable workflows, container images, and service images are not included in this group.
+The common group matches the `github-actions` manager's `action` dependency type. These Action updates, including Major updates, do not require Dashboard approval but remain subject to ordinary PR limits and manual merging. Runtime inputs such as `go-version`, reusable workflows, container images, and service images are not included in this group.
 
 ### JavaScript policy
 

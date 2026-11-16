@@ -39,6 +39,7 @@
       "description": "Group Action references separately from runtime versions and images, keeping major updates separate.",
       "matchManagers": ["github-actions"],
       "matchDepTypes": ["action"],
+      "dependencyDashboardApproval": false,
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions",
       "separateMajorMinor": true

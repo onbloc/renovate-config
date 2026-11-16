@@ -18,7 +18,7 @@ A new shared group needs evidence of a coherent dependency family and repeat use
 Preserve existing safeguards unless the PR explicitly proposes changing them:
 
 - Automerge stays disabled. Grouping or a non-major version number does not establish that an update is safe.
-- Ordinary Major updates keep Dashboard approval, and Action grouping keeps Major and non-major updates separate.
+- Ordinary Major updates outside the Action group keep Dashboard approval. Action updates, including Major updates, do not require Dashboard approval; Major and non-major Action groups remain separate.
 - Security fixes bypass ordinary schedules, release-age delays, approval, and PR limits without enabling automerge.
 - A group must not accidentally enable ordinary indirect Go updates or capture unrelated drivers, plugins, or runtime inputs.
 - Language presets remain additive and do not implicitly extend the common preset or restrict unrelated managers.
@@ -48,7 +48,7 @@ The workflow runs on PRs, pushes to `main`, and manual dispatch using a GitHub-h
 Strict validation does not prove consumer behavior. For a policy change, also inspect a representative consumer using onboarding or `renovate/reconfigure`:
 
 - Resolve common+JavaScript, common+Go, and mixed compositions when affected.
-- Check which dependencies match, which PRs are grouped, and whether ordinary Major approval is preserved.
+- Check which dependencies match and which PRs are grouped. Confirm that Action Major updates bypass Dashboard approval while other ordinary Major updates still require it.
 - Check security-fix exceptions using a supported alert when available. Authenticated developer access does not prove hosted Renovate access to a private preset.
 - Review changed manifests, lockfiles, and `go.sum` files, including dependent modules connected by local `replace` directives.
 - Confirm relevant consumer CI passes. Do not merge into production consumers solely to test a preset.
