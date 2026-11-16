@@ -60,7 +60,7 @@ The [common preset](default.json) extends `config:recommended`, keeping Renovate
 | Ordinary updates | No shared weekly schedule; up to three concurrent PRs and two new PRs per hour, per repository |
 | Ordinary Major updates | Require Dependency Dashboard approval before PR creation, except for grouped GitHub Action references |
 | Merging | Automerge is disabled; use the repository's required reviews and CI checks |
-| Labels | Add `renovate` without replacing other configured labels |
+| Labels | Add `renovate` to all update PRs and `renovate-security` additionally to security-fix PRs, without replacing other configured labels |
 | GitHub Actions | Keep tag references such as `@v7` instead of automatically pinning them to commit digests; create PRs without Dashboard approval, including Major updates; keep Major and non-major groups separate |
 | Security fixes | Separate, immediate PR creation without ordinary approval, release-age, schedule, or PR-limit gates; still no automerge |
 

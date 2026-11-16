@@ -25,6 +25,7 @@
   },
   "vulnerabilityAlerts": {
     "enabled": true,
+    "addLabels": ["renovate-security"],
     "automerge": false,
     "prCreation": "immediate",
     "dependencyDashboardApproval": false,
