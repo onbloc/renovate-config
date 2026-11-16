@@ -1,10 +1,23 @@
 # Onbloc Renovate Config
 
-Shared Renovate presets for Onbloc repositories. This repository defines common update policies and JavaScript and Go rules. Product-specific version constraints, dependency exceptions, and deployment policies belong in the consuming repository.
+Shared Renovate presets for Onbloc and Gnoswap repositories. Use them to keep dependency update policies consistent while retaining repository-specific exceptions locally.
 
-## Usage
+This repository provides configuration only. It does not install Renovate, enable GitHub security features, or change branch protection in consumer repositories.
 
-Install Renovate for the consuming repository and allow it to read this preset repository. Add a `renovate.json` file to the consuming repository's default branch.
+## Quick start
+
+1. Install Renovate for the consuming repository and grant it access to that repository.
+2. Confirm that Renovate can read this preset repository. See [Preset access](#preset-access).
+3. Add one of the following configurations as `renovate.json` in the consuming repository. For onboarding, edit the existing Renovate onboarding PR; for an already onboarded repository, open a configuration-change PR.
+4. Review the resolved configuration and update preview before merging into the branch Renovate uses for that repository.
+
+### Common policy only
+
+```json
+{
+  "extends": ["github>onbloc/renovate-config"]
+}
+```
 
 ### JavaScript
 
@@ -28,66 +41,114 @@ Install Renovate for the consuming repository and allow it to read this preset r
 }
 ```
 
-Mixed repositories can extend both ecosystem presets after the common preset. The ecosystem presets do not implicitly extend the common preset.
+Mixed repositories can extend both `:javascript` and `:go` after the common preset. The language presets do not implicitly extend the common preset.
 
-These examples track this repository's default branch. Changes take effect on the next Renovate run. After a version tag has been published, consumers can pin an existing tag, for example `github>onbloc/renovate-config:javascript#v1.0.0`.
+### Preset access
 
-### Access
+With the Mend Renovate App, a public repository cannot extend a private preset repository, even within the same organization. A public preset can be shared across organizations.
 
-While this repository is private, Renovate must have permission to read it. Grant the Onbloc Renovate installation access to both this repository and the consuming repository, and verify preset resolution in the onboarding PR.
+For private presets, the Renovate installation must have access to both the preset and consumer repositories. Access from a developer's GitHub account does not prove that the Renovate App can read the same preset. Do not merge a consumer configuration until preset access is available to Renovate.
 
-Do not commit tokens, registry credentials, or other secrets to presets or repository configuration. Configure any required credentials in the Renovate execution environment. This repository contains policy only and does not activate Renovate in product repositories.
+Never commit tokens or registry credentials to preset files or consumer configuration. Configure private dependency credentials in the Renovate execution environment.
 
-## Presets
+## Update policies
 
-| Preset | Policy |
+The [common preset](default.json) extends `config:recommended`, keeping Renovate's recommended ecosystem groups and workarounds.
+
+| Area | Behavior |
 | --- | --- |
-| [`default`](default.json) | `config:recommended`, no automerge, Dependency Dashboard, approval before ordinary major-update PRs, and commit SHA pinning for GitHub Actions |
-| [`javascript`](javascript.json) | Preserve existing pinned and ranged npm/Yarn/pnpm declarations; wait seven days for ordinary npm major, minor, and patch releases |
-| [`go`](go.json) | Run `go mod tidy` after module updates, limit indirect dependency updates to security fixes, and require approval for Go minimum-version and toolchain changes |
+| Ordinary updates | No shared weekly schedule; up to three concurrent PRs and two new PRs per hour, per repository |
+| Ordinary Major updates | Require approval in the Dependency Dashboard before PR creation |
+| Merging | Automerge is disabled; use the repository's required reviews and CI checks |
+| Labels | Add `renovate` without replacing other configured labels |
+| GitHub Actions | Pin commit digests; group Action references, separating Major from non-major updates |
+| Security fixes | Separate, immediate PR creation without ordinary approval, release-age, schedule, or PR-limit gates; still no automerge |
 
-The common schedule permits ordinary updates on Mondays from 09:00 to 18:00 in `Asia/Seoul`. Ordinary PR limits are three concurrent PRs and two PRs per hour. This controls update creation, not how often the bot executes.
+These settings control update processing, not how frequently the hosted bot executes. Dashboard approval controls PR creation, not permission to merge.
 
-- Dashboard approval controls PR creation. Required reviews and merge permissions must be enforced separately through branch protection or rulesets.
-- Test-directory manifests remain in scope. Installed dependencies, vendored code, and generated Yarn caches and editor SDKs are excluded.
-- Package installation scripts are ignored, and whole-lockfile maintenance is disabled. Artifact updates needed for individual dependency changes are still allowed.
-- No common manager allowlist is set, so composing ecosystem presets does not disable unrelated managers.
-- The Go preset does not force the minimum Go version to the latest release. It does not enable `gomodTidyAll`, import-path rewrites, or replacement massaging.
-- Additional Docker, Helm, Terraform, dependency exclusion, `resolutions`, fork, and branch rules are repository-specific. Omitting a dedicated preset does not disable a manager that Renovate normally enables.
+### GitHub Actions grouping
 
-## Security updates
+The common group matches the `github-actions` manager's `action` dependency type. Runtime inputs such as `go-version`, reusable workflows, container images, and service images are not included in this group.
 
-The default remediation path uses GitHub vulnerability alerts:
+### JavaScript policy
 
-1. Enable Dependency graph and Dependabot alerts in the consuming repository.
-2. Grant Renovate read access to Dependabot alerts.
-3. Verify manifest and lockfile recognition and actual security-fix PR creation.
-4. Disable Dependabot version-update and security-update PR creation only after the replacement has been verified. Keep Dependency graph and Dependabot alerts enabled.
+The [JavaScript preset](javascript.json):
 
-Recognized vulnerability fixes bypass the ordinary schedule, release-age delay, and Dashboard approval. They also bypass ordinary PR limits by default. Automerge remains disabled. Processing occurs on a subsequent Renovate run; this is not a real-time detection or deployment guarantee.
+- Preserves existing pinned and ranged dependency declarations through `rangeStrategy: "replace"`.
+- Waits seven days after release for ordinary npm Major, Minor, and Patch updates.
+- Groups non-major lint and format tooling, including ESLint, typescript-eslint, Prettier, and lint-staged. `eslint-config-next` and `eslint-plugin-storybook` are excluded from that generic group.
+- Groups non-major Jest, ts-jest, and Testing Library updates.
 
-The experimental `osvVulnerabilityAlerts` option is not enabled. A seven-day release delay does not establish that a package is safe or cover every transitive dependency. Pinning, replacement, and lockfile-related operations retain the upstream preset's age-check exceptions. If a malicious version has already executed, dependency updates do not replace incident response for affected environments and credentials.
+Major tooling updates retain their separate approval path. Pinning, replacement, and lockfile operations retain the upstream release-age preset's exceptions. A release delay is not a guarantee that a package is safe.
 
-## Validation
+### Go policy
 
-The [validation workflow](.github/workflows/validate.yml) runs on pull requests, pushes to `main`, and manual dispatch. It uses Renovate 44.188.0 in a digest-pinned container, mounts the checkout read-only, and runs strict repository-level validation for all three presets. The job has read-only repository permissions and does not receive a package registry token.
+The [Go preset](go.json):
 
-Use Node.js 24.x, version 24.11 or later, to run the pinned validator:
+- Runs `go mod tidy` after module dependency updates.
+- Limits standalone indirect dependency updates to security fixes. Indirect versions may still change as a consequence of direct upgrades and tidying.
+- Requires separate Dashboard approval for minimum Go version and toolchain changes, without forcing the minimum Go version to the latest release.
+- Groups non-major updates to `gorm.io/gorm`, `gorm.io/driver/mysql`, and `gorm.io/driver/postgres` for manual review.
 
-```sh
-npm exec --yes --ignore-scripts --package=renovate@44.188.0 -- \
-  renovate-config-validator --no-global --strict \
-  default.json javascript.json go.json
+The GORM group does not include observability plugins, raw SQL clients, or database server images. Grouping does not synchronize versions across repositories or guarantee compatibility. The preset does not enable `gomodTidyAll`, import-path rewrites, or replacement massaging; verify dependent module artifacts in multi-module repositories.
+
+### Scope and local exceptions
+
+Test-directory manifests remain in scope. Installed dependencies, vendored code, generated Yarn caches, and editor SDKs are excluded. Renovate package-manager operations ignore installation scripts, and whole-lockfile maintenance is disabled; artifact updates for individual dependencies are still allowed. These settings do not sandbox a consuming repository's CI.
+
+No common manager allowlist is set. Extending a language preset does not disable other managers that Renovate normally enables. Keep product-specific version constraints, fork replacements, manager exclusions, and deployment schedules in the consuming repository.
+
+## Enable security-fix PRs in a consumer
+
+The common preset already enables `vulnerabilityAlerts`. GitHub security settings and Renovate permissions must still be configured separately for each consumer.
+
+1. In the consumer repository's **Settings → Advanced Security**, enable **Dependency graph** and **Dependabot alerts**. Organization policy may manage these settings centrally.
+2. In the installed Renovate App's configuration, confirm access to the consumer repository and **read access to Dependabot alerts**. An organization owner may need to approve permissions.
+3. Under the consumer's **Security → Dependabot** page, check that GitHub recognizes the relevant manifests and lockfiles and reports any known vulnerable dependencies.
+4. When a supported, fixable alert exists, verify that Renovate creates a security-fix PR on a subsequent run.
+
+GitHub supplies the vulnerability alerts; Renovate proposes dependency fixes. This is not a real-time detection guarantee, and an alert without a resolvable fix may not produce a PR. Coverage depends on the recognized dependencies and supported ecosystems.
+
+**Dependabot alerts are distinct from Dependabot security updates and version updates.** No `dependabot.yml` is required just to enable alerts. After verifying Renovate's actual fix-PR path, disable Dependabot's PR-generating features if needed to avoid duplicate PRs. Keep Dependency graph and Dependabot alerts enabled.
+
+Security PRs can exceed the ordinary three-PR limit because the shared security PR limit is unlimited. They remain ungrouped and require manual merging. The experimental `osvVulnerabilityAlerts` option is not enabled.
+
+If a malicious dependency has already executed, updating it does not replace incident response for affected environments and credentials.
+
+## Following policy changes
+
+The quick-start examples follow this repository's default branch. A merged preset change takes effect when a consumer's Renovate run next resolves the preset; consumers do not receive a separate configuration-change PR merely because the shared preset changed.
+
+To control adoption, reference an existing version tag in every shared preset reference. For example, **only after `v1.0.0` has been published**:
+
+```json
+{
+  "extends": [
+    "github>onbloc/renovate-config#v1.0.0",
+    "github>onbloc/renovate-config:go#v1.0.0"
+  ]
+}
 ```
 
-`--ignore-scripts` prevents lifecycle scripts during validator installation. In environments without the native RE2 module, validation may fall back to JavaScript regular expressions.
+Use the same tag for the common and language presets. To adopt or roll back a policy release, change those references together and review the consumer configuration. A tag pins this repository's files, not the Renovate runtime or its upstream built-in presets. Tag publication is covered in [CONTRIBUTING.md](CONTRIBUTING.md#releasing-policy-changes).
 
-Schema validation does not prove runtime behavior. Use onboarding or `renovate/reconfigure` to inspect preset resolution, extracted dependencies, lockfile changes, and CI results in a consuming repository. Confirm that security fixes are not blocked by ordinary update policies.
+## Troubleshooting
+
+- **Preset cannot be found:** check spelling, the existence of any referenced tag, and Renovate's access to the preset repository. Successful access using a personal token is not sufficient.
+- **Ordinary PR has not appeared:** check Dashboard approval, the seven-day npm release delay, PR limits, repository-specific schedules, and the bot's latest execution log.
+- **Security alert has no PR:** check dependency recognition, availability of a supported fix, App permissions, and Renovate execution logs. Do not disable the alert to hide a remediation failure.
+- **Artifact updates fail:** inspect registry access and package-manager errors. In Go multi-module repositories, check local `replace` relationships and affected `go.sum` files.
+
+## Contributing and license
+
+For changes to these presets, validation commands, and Conventional Commit/PR requirements, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Licensed under the [MIT License](LICENSE).
 
 ## References
 
-- [Shareable config presets](https://docs.renovatebot.com/config-presets/)
-- [Config validation](https://docs.renovatebot.com/config-validation/)
-- [GitHub vulnerability alerts](https://docs.renovatebot.com/configuration-options/#vulnerabilityalerts)
-- [npm release-age checks and exceptions](https://docs.renovatebot.com/presets-security/#securityminimumreleaseagenpm)
-- [Go modules](https://docs.renovatebot.com/modules/manager/gomod/)
+- [Renovate shared presets](https://docs.renovatebot.com/config-presets/)
+- [Renovate vulnerability alerts](https://docs.renovatebot.com/configuration-options/#vulnerabilityalerts)
+- [Configure GitHub Dependabot alerts](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/configure-dependabot-alerts)
+- [Renovate npm release-age policy](https://docs.renovatebot.com/presets-security/#securityminimumreleaseagenpm)
+- [Renovate Go modules](https://docs.renovatebot.com/modules/manager/gomod/)
