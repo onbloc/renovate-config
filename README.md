@@ -61,7 +61,7 @@ The [common preset](default.json) extends `config:recommended`, keeping Renovate
 | Ordinary Major updates | Require Dependency Dashboard approval before PR creation, except for grouped GitHub Action references |
 | Merging | Automerge is disabled; use the repository's required reviews and CI checks |
 | Labels | Add `renovate` without replacing other configured labels |
-| GitHub Actions | Pin commit digests; create PRs without Dashboard approval, including Major updates; keep Major and non-major groups separate |
+| GitHub Actions | Keep tag references such as `@v7` instead of automatically pinning them to commit digests; create PRs without Dashboard approval, including Major updates; keep Major and non-major groups separate |
 | Security fixes | Separate, immediate PR creation without ordinary approval, release-age, schedule, or PR-limit gates; still no automerge |
 
 These settings control update processing, not how frequently the hosted bot executes. Dashboard approval controls PR creation, not permission to merge.
@@ -69,6 +69,8 @@ These settings control update processing, not how frequently the hosted bot exec
 ### GitHub Actions grouping
 
 The common group matches the `github-actions` manager's `action` dependency type. These Action updates, including Major updates, do not require Dashboard approval but remain subject to ordinary PR limits and manual merging. Runtime inputs such as `go-version`, reusable workflows, container images, and service images are not included in this group.
+
+The common preset does not force tag references to commit SHAs or impose a release-age delay on Action updates. Automerge remains disabled. Existing SHA-pinned references are not converted back to tags and can still receive digest updates. The JavaScript preset's seven-day delay applies to npm updates, not Actions.
 
 ### JavaScript policy
 
