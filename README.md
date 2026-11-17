@@ -60,11 +60,14 @@ The [common preset](default.json) extends `config:recommended`, keeping Renovate
 | Ordinary updates | No shared weekly schedule; up to three concurrent PRs and two new PRs per hour, per repository |
 | Ordinary Major updates | Require Dependency Dashboard approval before PR creation, except for grouped GitHub Action references |
 | Merging | Automerge is disabled; use the repository's required reviews and CI checks |
+| Rebasing | Automatically rebase only conflicting branches, including initial version-pinning updates; do not rebase solely because the base branch advances |
 | Labels | Add `renovate` to all update PRs and `renovate-security` additionally to security-fix PRs, without replacing other configured labels |
 | GitHub Actions | Keep tag references such as `@v7` instead of automatically pinning them to commit digests; create PRs without Dashboard approval, including Major updates; keep Major and non-major groups separate |
 | Security fixes | Separate, immediate PR creation without ordinary approval, release-age, schedule, or PR-limit gates; still no automerge |
 
 These settings control update processing, not how frequently the hosted bot executes. Dashboard approval controls PR creation, not permission to merge.
+
+If branch protection requires PRs to be up to date, a non-conflicting PR may still need a manual update before merging. Request one through the PR's rebase checkbox or Dependency Dashboard.
 
 ### GitHub Actions grouping
 
