@@ -14,6 +14,10 @@
     "**/.yarn/sdks/**"
   ],
   "automerge": false,
+  "rebaseWhen": "conflicted",
+  "pin": {
+    "rebaseWhen": "conflicted"
+  },
   "dependencyDashboard": true,
   "timezone": "Asia/Seoul",
   "prConcurrentLimit": 3,
