@@ -35,6 +35,17 @@
       "automerge": false
     },
     {
+      "description": "Group non-major updates to the ClickHouse Go driver and its protocol library.",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": [
+        "github.com/ClickHouse/ch-go",
+        "github.com/ClickHouse/clickhouse-go/v2"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "ClickHouse for Go",
+      "groupSlug": "clickhouse-go"
+    },
+    {
       "description": "Group non-major updates to go-redis modules by major version.",
       "matchManagers": ["gomod"],
       "matchPackageNames": ["github.com/redis/go-redis/**"],
