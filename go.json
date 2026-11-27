@@ -35,15 +35,12 @@
       "automerge": false
     },
     {
-      "description": "Group non-major updates to the go-redis v9 client and its v9 extra modules.",
+      "description": "Group non-major updates to go-redis modules by major version.",
       "matchManagers": ["gomod"],
-      "matchPackageNames": [
-        "github.com/redis/go-redis/v9",
-        "github.com/redis/go-redis/extra/*/v9"
-      ],
+      "matchPackageNames": ["github.com/redis/go-redis/**"],
       "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "go-redis",
-      "groupSlug": "go-redis"
+      "groupName": "go-redis v{{newMajor}}",
+      "groupSlug": "go-redis-{{newMajor}}"
     },
     {
       "description": "Group non-major Sarama and SCRAM updates for Kafka authentication.",
