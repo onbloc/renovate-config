@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Preserve JavaScript dependency ranges, delay ordinary npm releases for seven days, and group non-major tooling and Gno client updates.",
+  "description": "Preserve JavaScript dependency ranges, delay ordinary npm releases for seven days, and group related non-major npm updates.",
   "extends": ["security:minimumReleaseAgeNpm"],
   "packageRules": [
     {
@@ -51,12 +51,21 @@
       "groupSlug": "test-tooling"
     },
     {
-      "description": "Group non-major Gno and Tendermint 2 JavaScript client updates.",
+      "description": "Group non-major Gno and TM2 JavaScript client updates, including the compatible TM2 RPC 2.x line.",
       "matchManagers": ["npm"],
-      "matchPackageNames": ["@gnolang/gno-js-client", "@gnolang/tm2-js-client"],
+      "matchPackageNames": ["@gnolang/gno-js-client", "@gnolang/tm2-js-client", "@gnolang/tm2-rpc"],
+      "matchJsonata": ["packageName != '@gnolang/tm2-rpc' or newMajor = 2"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "Gno JavaScript clients",
       "groupSlug": "gno-js-clients"
+    },
+    {
+      "description": "Group non-major React Hook Form and validation resolver updates.",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["react-hook-form", "@hookform/resolvers"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "React Hook Form",
+      "groupSlug": "react-hook-form"
     }
   ]
 }
