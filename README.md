@@ -93,6 +93,7 @@ The [Go preset](go.json):
 - Runs `go mod tidy` after module dependency updates.
 - Limits standalone indirect dependency updates to security fixes. Indirect versions may still change as a consequence of direct upgrades and tidying.
 - Requires separate Dashboard approval for minimum Go version and toolchain changes, without forcing the minimum Go version to the latest release.
+- Prioritizes PRs for eligible `github.com/gnolang/gno` updates over ordinary updates without bypassing approval or PR limits. This does not match Gno submodules such as `github.com/gnolang/gno/contribs/gnodev`.
 - Groups non-major updates to `gorm.io/gorm`, `gorm.io/driver/mysql`, and `gorm.io/driver/postgres` for manual review.
 
 The GORM group does not include observability plugins, raw SQL clients, or database server images. Grouping does not synchronize versions across repositories or guarantee compatibility. The preset does not enable `gomodTidyAll`, import-path rewrites, or replacement massaging; verify dependent module artifacts in multi-module repositories.

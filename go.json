@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Maintain Go module artifacts, limit indirect updates to security fixes, review Go version changes separately, and group non-major GORM updates.",
+  "description": "Maintain Go module artifacts, limit indirect updates to security fixes, review Go version changes separately, prioritize Gno updates, and group non-major GORM updates.",
   "extends": ["security:gomodIndirectSecurityUpdates"],
   "packageRules": [
     {
@@ -14,6 +14,12 @@
       "matchDepTypes": ["golang", "toolchain"],
       "dependencyDashboardApproval": true,
       "groupName": null
+    },
+    {
+      "description": "Prioritize PRs for the Gno root Go module.",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": ["github.com/gnolang/gno"],
+      "prPriority": 10
     },
     {
       "description": "Group non-major GORM core, MySQL driver, and PostgreSQL driver updates for manual review.",
