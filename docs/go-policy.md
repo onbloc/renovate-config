@@ -16,6 +16,7 @@ The preset does not enable `gomodTidyAll`, import-path rewrites, or replacement 
 | Group | Included dependencies |
 | --- | --- |
 | GORM | `gorm.io/gorm`, `gorm.io/driver/mysql`, `gorm.io/driver/postgres`. Observability plugins, raw SQL clients, and database server images are excluded. |
+| ClickHouse for Go | `github.com/ClickHouse/ch-go` and `github.com/ClickHouse/clickhouse-go/v2`. Ordinary indirect updates remain disabled, and security alerts do not pull the other module into the same PR. |
 | go-redis | Go modules matching `github.com/redis/go-redis/**`, grouped by target major version (for example, `go-redis v9` and `go-redis v10`). Ordinary indirect updates remain disabled. |
 | Sarama and SCRAM | `github.com/IBM/sarama` and `github.com/xdg-go/scram`. |
 | Swagger for Go | `github.com/swaggo/swag`, `github.com/swaggo/gin-swagger`, and `github.com/swaggo/files`. The mise-managed `swag` command is excluded. |
