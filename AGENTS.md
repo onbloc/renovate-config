@@ -4,7 +4,7 @@ This repository contains shared Renovate configuration, not application code. `A
 
 ## Read first
 
-- [README.md](README.md): consumer setup, preset behavior, access requirements, and security alerts.
+- [README.md](README.md): consumer setup and links to the dependency policies in `docs/`.
 - [CONTRIBUTING.md](CONTRIBUTING.md): rule placement, validation commands, Conventional Commits, PR requirements, and releases.
 - [LICENSE](LICENSE): the repository's MIT license.
 
@@ -29,7 +29,7 @@ Unless the requested change explicitly revises these safeguards:
 - Keep language presets additive; do not implicitly include the common preset or disable unrelated managers.
 - Use narrow matchers. Action references are distinct from runtime inputs, workflows, and images; ORM packages are distinct from database servers and observability plugins.
 
-Grouping and SemVer classifications do not prove compatibility or safety. Keep README aligned with behavior changes, and keep contributor procedures in CONTRIBUTING instead of duplicating them here.
+Grouping and SemVer classifications do not prove compatibility or safety. Keep the dependency policies in `docs/` aligned with behavior changes, and keep contributor procedures in CONTRIBUTING instead of duplicating them here.
 
 ## Verification and publication
 

@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Maintain Go module artifacts, limit indirect updates to security fixes, review Go version changes separately, prioritize Gno updates, and group non-major GORM updates.",
+  "description": "Maintain Go module artifacts, limit indirect updates to security fixes, review Go version changes separately, prioritize Gno updates, and group related non-major dependency updates.",
   "extends": ["security:gomodIndirectSecurityUpdates"],
   "packageRules": [
     {
@@ -33,6 +33,56 @@
       "groupName": "GORM",
       "groupSlug": "gorm",
       "automerge": false
+    },
+    {
+      "description": "Group non-major updates to go-redis modules by major version.",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": ["github.com/redis/go-redis/**"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "go-redis v{{newMajor}}",
+      "groupSlug": "go-redis-{{newMajor}}"
+    },
+    {
+      "description": "Group non-major Sarama and SCRAM updates for Kafka authentication.",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": ["github.com/IBM/sarama", "github.com/xdg-go/scram"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Sarama and SCRAM",
+      "groupSlug": "sarama-scram"
+    },
+    {
+      "description": "Group non-major updates to the Swagger generator library, Gin integration, and embedded UI assets.",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": [
+        "github.com/swaggo/swag",
+        "github.com/swaggo/gin-swagger",
+        "github.com/swaggo/files"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Swagger for Go",
+      "groupSlug": "swagger-go"
+    },
+    {
+      "description": "Group non-major Protobuf Go runtime and mise-managed Go generator updates.",
+      "matchManagers": ["gomod", "mise"],
+      "matchPackageNames": [
+        "google.golang.org/protobuf",
+        "google.golang.org/protobuf/cmd/protoc-gen-go"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Protobuf for Go",
+      "groupSlug": "protobuf-go"
+    },
+    {
+      "description": "Group non-major gRPC Go runtime and mise-managed Go generator updates.",
+      "matchManagers": ["gomod", "mise"],
+      "matchPackageNames": [
+        "google.golang.org/grpc",
+        "google.golang.org/grpc/cmd/protoc-gen-go-grpc"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "gRPC for Go",
+      "groupSlug": "grpc-go"
     }
   ]
 }
