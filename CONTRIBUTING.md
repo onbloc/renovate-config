@@ -1,6 +1,6 @@
 # Contributing
 
-This guide covers changes to the shared presets. For configuration and adoption in a consuming repository, see [README.md](README.md).
+This guide covers changes to the shared presets. For setup and links to the dependency policies, see [README.md](README.md).
 
 Write commits, PR titles, and PR descriptions in English. Keep contributions focused on one policy change and explain the effect on consuming repositories.
 
@@ -27,7 +27,7 @@ Preserve existing safeguards unless the PR explicitly proposes changing them:
 
 1. Start a short, descriptive branch from the current `main` branch, such as `docs/preset-usage` or `fix/security-approval`.
 2. Reuse the existing preset structure. Prefer narrow package rules over a new preset unless multiple consumers need the distinction.
-3. Update the relevant usage documentation when behavior changes. Keep consumer-facing explanations in README and contribution procedures here.
+3. Update the relevant [dependency policy](README.md#update-policies) when behavior changes. Keep setup and policy links in README, policy details in `docs/`, and contribution procedures here.
 4. Do not include credentials, internal service URLs, private ticket links, or sensitive package metadata in public commits or PRs.
 
 ## Validate
