@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Preserve JavaScript dependency ranges, delay ordinary npm releases for seven days, and group non-major lint, format, and test tooling.",
+  "description": "Preserve JavaScript dependency ranges, delay ordinary npm releases for seven days, and group non-major tooling and Gno client updates.",
   "extends": ["security:minimumReleaseAgeNpm"],
   "packageRules": [
     {
@@ -21,6 +21,8 @@
       "matchPackageNames": [
         "eslint",
         "@eslint/*",
+        "@eslint-react/eslint-plugin",
+        "@stylistic/eslint-plugin",
         "@typescript-eslint/*",
         "typescript-eslint",
         "eslint-*",
@@ -47,6 +49,14 @@
       ],
       "groupName": "Test tooling",
       "groupSlug": "test-tooling"
+    },
+    {
+      "description": "Group non-major Gno and Tendermint 2 JavaScript client updates.",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["@gnolang/gno-js-client", "@gnolang/tm2-js-client"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Gno JavaScript clients",
+      "groupSlug": "gno-js-clients"
     }
   ]
 }

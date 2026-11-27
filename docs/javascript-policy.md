@@ -9,7 +9,8 @@ Use the [JavaScript preset](../javascript.json) alongside the [common preset](co
 
 ## Non-major update groups
 
-- **Lint and format tooling:** ESLint, typescript-eslint, Prettier, and lint-staged. `eslint-config-next` and `eslint-plugin-storybook` are excluded from this group.
+- **Lint and format tooling:** ESLint, `@eslint-react/eslint-plugin`, `@stylistic/eslint-plugin`, typescript-eslint, Prettier, and lint-staged. `eslint-config-next` and `eslint-plugin-storybook` are excluded from this group.
 - **Test tooling:** Jest, ts-jest, and Testing Library.
+- **Gno JavaScript clients:** `@gnolang/gno-js-client` and `@gnolang/tm2-js-client`. `@gnolang/tm2-rpc` remains separate.
 
 Major tooling updates retain their separate Dependency Dashboard approval path.
