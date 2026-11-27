@@ -95,7 +95,7 @@ The [Go preset](go.json):
 - Requires separate Dashboard approval for minimum Go version and toolchain changes, without forcing the minimum Go version to the latest release.
 - Prioritizes PRs for eligible `github.com/gnolang/gno` updates over ordinary updates without bypassing approval or PR limits. This does not match Gno submodules such as `github.com/gnolang/gno/contribs/gnodev`.
 - Groups non-major updates to `gorm.io/gorm`, `gorm.io/driver/mysql`, and `gorm.io/driver/postgres` for manual review.
-- Groups non-major `go-redis/v9`, `redisotel/v9`, and `rediscmd/v9` module updates without enabling ordinary indirect updates.
+- Groups non-major updates to `go-redis/v9` and `go-redis/extra/*/v9` modules without enabling ordinary indirect updates.
 - Groups non-major updates to Sarama and `github.com/xdg-go/scram`, and separately groups `swaggo/swag`, `swaggo/gin-swagger`, and `swaggo/files`.
 - Groups non-major updates to the Protobuf Go runtime and its mise-managed `protoc-gen-go` tool. The gRPC Go runtime and `protoc-gen-go-grpc` form a separate group. The `protoc` compiler and the mise-managed `swag` command are not part of these groups.
 

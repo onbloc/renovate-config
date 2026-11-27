@@ -35,12 +35,11 @@
       "automerge": false
     },
     {
-      "description": "Group non-major go-redis client and instrumentation module updates.",
+      "description": "Group non-major updates to the go-redis v9 client and its v9 extra modules.",
       "matchManagers": ["gomod"],
       "matchPackageNames": [
         "github.com/redis/go-redis/v9",
-        "github.com/redis/go-redis/extra/redisotel/v9",
-        "github.com/redis/go-redis/extra/rediscmd/v9"
+        "github.com/redis/go-redis/extra/*/v9"
       ],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "go-redis",
